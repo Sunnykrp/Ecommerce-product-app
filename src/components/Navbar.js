@@ -17,7 +17,7 @@ export default function Navbar() {
                 <div className="flex justify-between h-16 items-center">
                     {/* Logo / Brand */}
                     <Link href="/" className="text-xl font-bold text-gray-800">
-                        Ecom
+                        E-commerce
                     </Link>
 
                     {/* Navigation Links */}

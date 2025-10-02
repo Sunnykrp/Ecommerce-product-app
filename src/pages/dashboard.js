@@ -59,7 +59,7 @@ export default function Dashboard() {
             {/* Products Table */}
             <div className="bg-white rounded-lg shadow-md p-6">
                 <div className="flex justify-between items-center mb-6">
-                    <h2 className="text-xl font-semibold">Products Overview</h2>
+                    <h2 className="text-md sm:text-xl font-semibold">Products Overview</h2>
                     
                     {/* Sorting Option */}
                     <div className="flex items-center space-x-2">

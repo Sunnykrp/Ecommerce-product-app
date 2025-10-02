@@ -11,6 +11,16 @@ const Cart = () => {
         dispatch(updateQty({ id, qty }));
     };
 
+    const incrementQty = (id, currentQty) => {
+        dispatch(updateQty({ id, qty: currentQty + 1 }));
+    };
+
+    const decrementQty = (id, currentQty) => {
+        if (currentQty > 1) {
+            dispatch(updateQty({ id, qty: currentQty - 1 }));
+        }
+    };
+
     if (cartItems.length === 0)
         return <p className="p-4 text-center text-gray-700">Your cart is empty.</p>;
 
@@ -28,16 +38,28 @@ const Cart = () => {
                             </div>
                         </div>
                         <div className="flex items-center gap-2">
+                            <button
+                                onClick={() => decrementQty(product.id, qty)}
+                                className="bg-gray-300 cursor-pointer hover:bg-gray-400 text-gray-800 px-2 py-1 rounded-md font-bold"
+                            >
+                                -
+                            </button>
                             <input
                                 type="number"
                                 min="1"
                                 value={qty}
                                 onChange={(e) => handleQtyChange(product.id, e)}
-                                className="w-16 border rounded-md px-2 py-1"
+                                className="w-16 border rounded-md px-2 py-1 text-center"
                             />
                             <button
+                                onClick={() => incrementQty(product.id, qty)}
+                                className="bg-gray-300 cursor-pointer hover:bg-gray-400 text-gray-800 px-2 py-1 rounded-md font-bold"
+                            >
+                                +
+                            </button>
+                            <button
                                 onClick={() => dispatch(removeFromCart(product.id))}
-                                className="bg-red-500 text-white px-2 py-1 rounded-md hover:bg-red-600"
+                                className="bg-red-500 cursor-pointer text-white px-2 py-1 rounded-md hover:bg-red-600 ml-2"
                             >
                                 Remove
                             </button>
@@ -50,7 +72,7 @@ const Cart = () => {
                 <p className="text-xl font-bold">Total: ${total.toFixed(2)}</p>
                 <button
                     onClick={() => dispatch(clearCart())}
-                    className="mt-2 bg-gray-600 text-white px-4 py-2 rounded-md hover:bg-gray-700"
+                    className="mt-2 bg-gray-600 cursor-pointer text-white px-4 py-2 rounded-md hover:bg-gray-700"
                 >
                     Clear Cart
                 </button>
