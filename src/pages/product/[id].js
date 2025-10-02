@@ -1,21 +1,26 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
+import { useDispatch } from "react-redux";
+import { addToCart } from "../../redux/cartSlice";
 import { fetchProductByID } from "../../utils/api";
 
-export default function ProductDetails() {
+const ProductDetails = () => {
     const router = useRouter();
     const { id } = router.query;
+    const dispatch = useDispatch();
     const [product, setProduct] = useState(null);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
 
     useEffect(() => {
         if (id) {
             const getProduct = async () => {
+                setLoading(true);
                 try {
                     const data = await fetchProductByID(id);
                     setProduct(data);
-                } catch (error) {
-                    console.error("Failed to fetch product");
+                } catch (err) {
+                    setError("Failed to fetch product details");
                 } finally {
                     setLoading(false);
                 }
@@ -24,21 +29,35 @@ export default function ProductDetails() {
         }
     }, [id]);
 
-    if (loading) return <div>Loading...</div>;
-    if (!product) return <div>Product not found</div>;
+    const handleAddToCart = () => {
+        dispatch(addToCart(product));
+        alert("Product added to cart!");
+    };
+
+    if (loading) return <p className="p-4">Loading product...</p>;
+    if (error) return <p className="p-4 text-red-500">{error}</p>;
+    if (!product) return null;
 
     return (
-        <div className="max-w-4xl mx-auto p-4">
-            <img src={product.image} alt={product.title} className="w-full md:w-1/2 h-96 object-contain"/>
-            <h1 className="text-2xl font-bold">{product.title}</h1>
-            <p className="text-gray-700">{product.description}</p>
-            <p className="text-xl font-semibold">${product.price}</p>
-            <button 
-                onClick={() => alert("Added to cart!")} // Human-like simple solution first
-                className="mt-4 bg-blue-600 text-white px-4 py-2 rounded"
-            >
-                Add to Cart
-            </button>
+        <div className="max-w-4xl mx-auto p-4 flex flex-col md:flex-row gap-6">
+            <img
+                src={product.image}
+                alt={product.title}
+                className="w-full md:w-1/2 h-96 object-contain"
+            />
+            <div className="flex-1 flex flex-col gap-4">
+                <h1 className="text-2xl font-bold">{product.title}</h1>
+                <p className="text-gray-700">{product.description}</p>
+                <p className="text-xl font-semibold">${product.price}</p>
+                <button
+                    onClick={handleAddToCart}
+                    className="mt-4 bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition"
+                >
+                    Add to Cart
+                </button>
+            </div>
         </div>
     );
-}
+};
+
+export default ProductDetails;
