@@ -11,6 +11,7 @@ const ProductDetails = () => {
     const [product, setProduct] = useState(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+    const [addedToCart, setAddedToCart] = useState(false);
 
     useEffect(() => {
         if (id) {
@@ -31,7 +32,8 @@ const ProductDetails = () => {
 
     const handleAddToCart = () => {
         dispatch(addToCart(product));
-        alert("Product added to cart!");
+        setAddedToCart(true);
+        setTimeout(() => setAddedToCart(false), 2000);
     };
 
     if (loading) return <p className="p-4">Loading product...</p>;
@@ -49,6 +51,13 @@ const ProductDetails = () => {
                 <h1 className="text-2xl font-bold">{product.title}</h1>
                 <p className="text-gray-700">{product.description}</p>
                 <p className="text-xl font-semibold">${product.price}</p>
+                
+                {addedToCart && (
+                    <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-2 rounded">
+                        ✅ Product added to cart!
+                    </div>
+                )}
+                
                 <button
                     onClick={handleAddToCart}
                     className="mt-4 bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition"
